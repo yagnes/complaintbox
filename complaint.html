@@ -1,0 +1,165 @@
+<html>
+
+<head>
+    <title>Complaint Box</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- <script>
+            var result;
+            var app = angular.module('myApp', []);
+
+                $(document).ready(function(){
+                    var ordinates;
+        var lo;
+        var la;
+
+        window.onload = function() {
+            var startPos;
+
+            var geoSuccess = function(position) {
+                startPos = position;
+                lo = startPos.coords.longitude;
+                la = startPos.coords.latitude;
+                sync();
+            };
+            navigator.geolocation.getCurrentPosition(geoSuccess);
+            
+        }
+                 var sync = function(){  
+                          $.post("http://localhost:3000/getLocation",
+                        {
+                          "longitude":lo,
+                          "latitude":la
+                        },
+                        function(data,status){
+                          window.result = data.res;
+                           console.log(window.result);
+                           // document.getElementById('loc').value = window.result;
+                        });
+                    }});
+                function locateme(){
+                    console.log(result)
+                    document.getElementById('loc').value = window.result;
+                }
+        app.controller('myCtrl', function($scope, $http) {
+            $scope.button = 'Submit'
+            $scope.fwrd = function() {
+                console.log($scope.user)
+                var res = {
+                    method: 'POST',
+                    url: 'http://localhost:3000/petition',
+                    data: $scope.user,
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    }
+                }
+                $http(res).then(function(response) {
+                    console.log(response.data.RefId);
+                    $scope.result = "Your request is registered and you can track your problem with \" "+response.data.RefId+" \" as a reference number"
+                    $scope.button = "Add another complaint"
+                    $scope.user='';
+                })
+            }
+        })
+    </script> -->
+</head>
+<style>
+    #img {
+        background-image: url("public/images/log.png");
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin-top: 0px;
+        position: absolute;
+        width: 100%;
+    }
+    
+    #img-bg {
+        background: rgba(0, 0, 0, 0.8);
+        height: 100%;
+        width: 100%;
+        margin-top: 0px;
+        position: absolute;
+    }
+    
+    .button {
+        background-color: #4CAF50;
+        /* Green */
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+    
+    .button1 {
+        background-color: white;
+        color: black;
+        border: 2px solid #4CAF50;
+    }
+    
+    .button1:hover {
+        background-color: #4CAF50;
+        color: white;
+   
+    }
+</style>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div id="img">
+        <div id="img-bg">
+            <center>
+                <h1 style="color:white;text-transform: uppercase ">Complaint Box</h1>
+                <div class="panel panel-default" style="width:30%;margin-left:25%;margin-right:25%;margin-top:100px;position:relative">
+                    <form ng-submit="fwrd()" ng-hide="{{result}}">
+                        <div style="margin-top: 50px">
+                            <div style="margin-left:35px">
+                                <form name="myForm">
+                                    <div style="align:center" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input autofocus ng-model="user.name" type="text" style="width: 90%" class="form-control" name="name" title="Your Name..." placeholder="Name" required>
+                                    </div>
+                                    <br/>
+                                    <div style="align:center" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                        <input autofocus ng-model="user.mail" type="email" style="width: 90%" class="form-control" name="mail" title="Your Mail..." placeholder="Email" required>
+                                    </div>
+                                    <br/>
+                                    <div style="align:center" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                                        <input autofocus ng-model="user.number" type="number" style="width: 90%" class="form-control" name="number" title="Phone Number" placeholder="Phone Number" required>
+                                    </div>
+                                    <br/>
+                                    <div style="align:center" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i> </span>
+                                        <textarea autofocus rows="3" cols="10" ng-model="user.message" ng-focus="cls()" type="text" name="message" style="width: 90%" class="form-control" title="Your Message..." placeholder="Message" required></textarea> 
+                                    </div>
+                                    <br/>
+                                    <div style="align:center" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker" onclick="locateme()"></i></span>
+                                        <input autofocus ng-model="user.location" type="text" style="width: 90%" class="form-control" id="loc" name="location" title="Location" placeholder="Address" required>
+                                        
+                                    </div>
+                                    <br/>
+                                </form>
+                            </div>
+                            <div class="alert alert-success"><span>{{result}}</span></div>
+                            <button autofocus class="button button1" ng-submit="fwrd()" style="width:90%">{{button}}</button>
+                        </div>
+                    </form>
+                </div>
+            </center>
+        </div>
+    </div>
+</body>
+
+</html>

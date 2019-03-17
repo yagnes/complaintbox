@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Status Update</title>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+    <script>
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function($scope, $http) {
+           
+            $scope.find = function(){
+                var res = {
+                    method: 'POST',
+                    url : 'http://localhost:3000/status',
+                    data: $scope.dat,
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    }
+                }
+                $http(res).then(function(resp){
+                    if(resp){
+                    console.log(resp.data.data.update);
+                    $scope.data = resp.data.data;
+                    if(!resp.data.data.update){
+                    $scope.resolved = 'yes';
+                    }
+                    }
+                     })
+            }
+            $scope.update =function(){
+                var res ={
+                method :'POST',
+                url:'https://aef67763.ngrok.io/update',
+                data:({'update':'This problem is resolved!','ref':$scope.dat}),
+                headers: {
+                        'Content-Type': 'Application/json'
+                    }
+                }
+                $http(res).then(function(resp){
+                    if(resp){
+                        console.log(resp.data.data)
+                        if(resp.data.data == 'updated'){
+                            $scope.rmve = 'updated'
+                            $scope.dat = '';
+                        } 
+                    }
+                     })
+
+            }
+        })
+        </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="public/css/style1.css" rel="stylesheet">
+</head>
+<body id="main" ng-app="myApp" ng-controller="myCtrl">
+   <center><div class="panel panel-default" style="margin-left:25%;margin-right:25%;margin-top:10%">
+       <h1 style="align:center">Problem Status</h1>
+    <br/>
+       <form ng-submit="find()">
+        <input type="text" class="form-control" style="width:75%" placeholder="Enter your Reference Id:" ng-model="dat.RefId" name="refId">
+        <br/>
+        <div ng-hide="rmve">
+        <ul style="text-align:left" ng-repeat="i in data">
+            {{i}}
+            <hr>
+        </ul>
+        
+        
+        <div ng-show="resolved">
+                Is this problem resolved?<sup style="color:red">*</sup><input type="checkbox" ng-model="check" ng-click="update()" ></div>
+
+        </div>
+                <div ng-hide="data" ng-show="rmve">
+            <button type="submit" ng-click="find()" class="btn btn-primary" style="width:50%">Find</button></div>
+            <br/><br/>
+   </div>
+   </center>
+</body>
+
+</html>
